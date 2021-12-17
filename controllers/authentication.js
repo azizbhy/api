@@ -1,7 +1,8 @@
 const User = require("../models/User");
+const { jwtSecret, jwtExpire } = require("../environment/keys");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { jwtSecret, jwtExpire } = require("../environment/keys");
+
 
 exports.registerUserController = async (req, res) => {
 
@@ -11,9 +12,9 @@ exports.registerUserController = async (req, res) => {
     const user = await User.findOne({ email: email });
 
     if (user) {
-      console.log("Email already exists");
+      console.log("Email Exists !!");
       return res.status(400).json({
-        errorMessage: "Email already exists",
+        errorMessage: "Email Exists !",
       });
     } else {
       console.log("Successful Signing up");
@@ -31,14 +32,14 @@ exports.registerUserController = async (req, res) => {
       await newUser.save(); // save to db
 
       return res.status(201).json({
-        successMessage: "Registration success . Please signin.",
+        successMessage: "Registration success !!",
       });
     }
   } catch (err) {
     console.log("signupController error: ", err);
     
     return res.status(500).json({
-      errorMessage: "Server error",
+      errorMessage: "Internal Server Error",
     });
   }
 };
@@ -49,17 +50,17 @@ exports.loginUserController = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      console.log("Invalid credentials");
+      console.log("Wrong Credentials");
       return res.status(404).json({
-        errorMessage: "Invalid credentials",
+        errorMessage: "Wrong Credentials",
       });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.log("Invalid credentials");
+      console.log("Wrong credentials");
       return res.status(400).json({
-        errorMessage: "Invalid credentials",
+        errorMessage: "Wrong credentials",
       });
     }
 
